@@ -1,21 +1,14 @@
 {
-  "name": "back-api",
+  "name": "nodejs-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A minimal Node.js web application.",
+  "main": "app.js",
+  "author": "alphasec",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kosy-wer/Back-End-API.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/kosy-wer/Back-End-API/issues"
-  },
-  "homepage": "https://github.com/kosy-wer/Back-End-API#readme"
+    "start": "node app.js"
+  }
 }
