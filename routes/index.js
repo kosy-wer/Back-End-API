@@ -1,8 +1,17 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+
 const router = express.Router();
+
 const SUPABASE_URL = 'https://ymbtbodeofdcgnsgxzzg.supabase.co/rest/v1/users';
 const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltYnRib2Rlb2ZkY2duc2d4enpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMzEwNTMsImV4cCI6MjA2ODgwNzA1M30.a4RqHjHgpFuRoyRnxueX4NJEoE2subxq-hnfXTwZhME';
+
+router.use(cors({
+  origin: 'https://kosy-wer.github.io/Front-End-API/', // ganti dengan URL GitHub Pages kamu
+  methods: ['GET', 'POST'], // method yang diizinkan
+  allowedHeaders: ['Content-Type', 'Authorization'] // header yang diizinkan
+}));
 
 // Serve the index.html file for the root route
 router.get('/', (req, res) => {
