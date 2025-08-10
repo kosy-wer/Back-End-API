@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://ymbtbodeofdcgnsgxzzg.supabase.co/rest/v1/users';
 const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltYnRib2Rlb2ZkY2duc2d4enpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMzEwNTMsImV4cCI6MjA2ODgwNzA1M30.a4RqHjHgpFuRoyRnxueX4NJEoE2subxq-hnfXTwZhME';
 
 router.use(cors({
-  origin: 'https://kosy-wer.github.io/Front-End-API/', // ganti dengan URL GitHub Pages kamu
+  origin: 'https://kosy-wer.github.io', // ganti dengan URL GitHub Pages kamu
   methods: ['GET', 'POST'], // method yang diizinkan
   allowedHeaders: ['Content-Type', 'Authorization'] // header yang diizinkan
 }));
@@ -32,6 +32,22 @@ router.get('/users', async (req, res) => {
 
     const data = await response.json();
     res.json(data); // kirim hasil JSON langsung ke client
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+.get('/users', async (req, res) => {
+  try {
+    const response = await fetch(SUPABASE_URL, {
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`
+      }
+    });
+    const data = await response.json();
+    res.json(data);
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Internal Server Error' });
