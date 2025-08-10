@@ -17,7 +17,7 @@ router.use(cors({
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
-router.get('/users', async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     const response = await fetch(SUPABASE_URL, {
       headers: {
@@ -38,7 +38,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
-.get('/users', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const response = await fetch(SUPABASE_URL, {
       headers: {
