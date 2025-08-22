@@ -17,26 +17,6 @@ router.use(cors({
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
-router.post('/users', async (req, res) => {
-  try {
-    const response = await fetch(SUPABASE_URL, {
-      headers: {
-        apikey: API_KEY,
-        Authorization: `Bearer ${API_KEY}`
-      }
-    });
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: await response.text() });
-    }
-
-    const data = await response.json();
-    res.json(data); // kirim hasil JSON langsung ke client
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 router.get('/users', async (req, res) => {
   try {
@@ -51,6 +31,37 @@ router.get('/users', async (req, res) => {
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post("/users", async (req, res) => {
+  const { Title, Descriptions } = req.body;
+
+  if (!Title || !Descriptions) {
+    return res.status(400).json({ error: "Title & Descriptions required" });
+  }
+
+  try {
+    const response = await fetch(SUPABASE_URL, {
+      method: "POST",
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify({ Title, Descriptions }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    res.json({ message: "Inserted successfully", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
