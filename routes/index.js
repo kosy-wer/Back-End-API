@@ -34,7 +34,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
-app.post("/users", async (req, res) => {
+router.post("/users", async (req, res) => {
   const { Title, Descriptions } = req.body;
 
   if (!Title || !Descriptions) {
