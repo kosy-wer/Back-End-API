@@ -1,24 +1,27 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-
-const router = express.Router();
-
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const SUPABASE_URL = 'https://ymbtbodeofdcgnsgxzzg.supabase.co/rest/v1/users';
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltYnRib2Rlb2ZkY2duc2d4enpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMzEwNTMsImV4cCI6MjA2ODgwNzA1M30.a4RqHjHgpFuRoyRnxueX4NJEoE2subxq-hnfXTwZhME';
+const API_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltYnRib2Rlb2ZkY2duc2d4enpnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzIzMTA1MywiZXhwIjoyMDY4ODA3MDUzfQ.ejm_bGvGVWMrpaTsjJKS2EspWffmgHjmQscLuyDlfDI";
 
-router.use(cors({
-  origin: 'https://kosy-wer.github.io', // ganti dengan URL GitHub Pages kamu
-  methods: ['GET', 'POST'], // method yang diizinkan
-  allowedHeaders: ['Content-Type', 'Authorization'] // header yang diizinkan
+app.use(cors({
+  origin:[
+    "https://kosy-wer.github.io", 
+    "http://localhost:3000"
+],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Serve the index.html file for the root route
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
 
-router.get('/users', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
     const response = await fetch(SUPABASE_URL, {
       headers: {
@@ -34,7 +37,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
-router.post("/users", async (req, res) => {
+app.post("/users", async (req, res) => {
   const { Title, Descriptions } = req.body;
 
   if (!Title || !Descriptions) {
@@ -66,4 +69,4 @@ router.post("/users", async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports = app;
