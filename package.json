@@ -7,9 +7,20 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2"
   },
   "scripts": {
     "start": "node app.js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kosy-wer/Back-End-API.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kosy-wer/Back-End-API/issues"
+  },
+  "homepage": "https://github.com/kosy-wer/Back-End-API#readme"
 }
