@@ -67,6 +67,66 @@ app.post("/users", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+app.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: "User ID required" });
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}?id=eq.${id}`, {
+      method: "DELETE",
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    res.json({ message: "Deleted successfully", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const { Title, Descriptions } = req.body;
+
+  if (!id || !Title || !Descriptions) {
+    return res.status(400).json({ error: "User ID, Title & Descriptions required" });
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}?id=eq.${id}`, {
+      method: "PATCH", // bisa juga "PUT", tapi Supabase biasa pakai PATCH
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify({ Title, Descriptions }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    res.json({ message: "Updated successfully", data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 module.exports = app;
