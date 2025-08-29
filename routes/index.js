@@ -10,9 +10,9 @@ const API_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 app.use(cors({
   origin:[
     "https://kosy-wer.github.io", 
-    "http://localhost:8000"
+    "http://localhost:8080"
 ],
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
