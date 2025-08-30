@@ -7,6 +7,11 @@ app.use(express.urlencoded({ extended: true }));
 const SUPABASE_URL = 'https://ymbtbodeofdcgnsgxzzg.supabase.co/rest/v1/users';
 const API_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltYnRib2Rlb2ZkY2duc2d4enpnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzIzMTA1MywiZXhwIjoyMDY4ODA3MDUzfQ.ejm_bGvGVWMrpaTsjJKS2EspWffmgHjmQscLuyDlfDI";
 
+const admin = [
+  { username: "admin", password: "12345" },
+];
+
+
 app.use(cors({
   origin:[
     "https://kosy-wer.github.io", 
@@ -16,12 +21,36 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Serve the index.html file for the root route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
 
-app.get('/users', async (req, res) => {
+const users = [
+  { username: "admin", password: "12345" },
+];
+
+function basicAuth(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader || !authHeader.startsWith("Basic ")) {
+    res.set("WWW-Authenticate", "Basic");
+    return res.status(401).send("Authentication required");
+  }
+
+  const base64Credentials = authHeader.split(" ")[1];
+  const credentials = Buffer.from(base64Credentials, "base64").toString("ascii");
+  const [username, password] = credentials.split(":");
+
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user) {
+    return res.status(401).send("Invalid credentials");
+  }
+
+  req.user = user;
+  next();
+}
+
+
+app.get('/users',basicAuth, async (req, res) => {
   try {
     const response = await fetch(SUPABASE_URL, {
       headers: {
@@ -37,7 +66,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users",basicAuth, async (req, res) => {
   const { Title, Descriptions } = req.body;
 
   if (!Title || !Descriptions) {
@@ -67,7 +96,7 @@ app.post("/users", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id",basicAuth, async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
@@ -96,7 +125,7 @@ app.delete("/users/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id",basicAuth, async (req, res) => {
   const { id } = req.params;
   const { Title, Descriptions } = req.body;
 
@@ -106,7 +135,7 @@ app.put("/users/:id", async (req, res) => {
 
   try {
     const response = await fetch(`${SUPABASE_URL}?id=eq.${id}`, {
-      method: "PATCH", // bisa juga "PUT", tapi Supabase biasa pakai PATCH
+      method: "PATCH",
       headers: {
         apikey: API_KEY,
         Authorization: `Bearer ${API_KEY}`,
